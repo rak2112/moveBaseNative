@@ -1,0 +1,3 @@
+rootProject.name = 'movieBaseNative'
+
+include ':app'
