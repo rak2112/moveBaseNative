@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Header, Footer, FooterTab, Content, Tab, Button, Tabs, Text, Icon } from 'native-base';
 import { TabNavigator, StackNavigator } from "react-navigation";
+import { NavigationActions } from 'react-navigation'
 import Movies from './Movies';
 import Details from './Details';
 import SearchComp from './SearchComp';
@@ -58,7 +59,7 @@ export default (MainScreenNavigator = TabNavigator(
             <Button
               vertical
               active={props.navigationState.index === 1}
-              onPress={() => props.navigation.navigate("SearchComp")}>
+              onPress={() => props.navigation.navigate('SearchComp', {date: new Date()}) }>
               <Icon name="search" />
               <Text>Browse</Text>
             </Button>

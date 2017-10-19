@@ -62,18 +62,31 @@ export const movies = ( state = initialStateMovies, action) => {
   }
 }
 
-const moviesFound = {moviesFound:[]};
+const moviesFound = {isFetching: false, items:[], defaultInputValue: null};
 export const searchedMovies = (state = moviesFound, action) => {
   switch(action.type) {
+    case 'Navigation/NAVIGATE':
+      console.log('i got this....');
+       return (action.routeName === 'SearchComp') ? ({...state, items:[]}) : state;
+    case 'SEARCH_FOR_MOVIES':
+      return {
+        ...state,
+        defaultInputValue: action.movie,
+        isFetching: true
+      }
     case 'MOVIES_SEARCHED':
       return {
         ...state,
-        moviesFound: action.res
+        isFetching: false,
+        items: action.res['results']
       }
     case 'RESET_QUICK_SEARCH':
+      console.log('resettting.....')
       return {
         ...state,
-        moviesFound
+        defaultInputValue: null,
+        isFetching: false,
+        items:[]
       }
     default:
       return state;

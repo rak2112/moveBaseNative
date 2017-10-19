@@ -7,6 +7,8 @@ export const movieSearched = (res) => ({ type: 'MOVIES_SEARCHED', res});
 
 export const resetQuickSearch = () => ({ type: 'RESET_QUICK_SEARCH'});
 
+export const searchForMovies = (movie) => ({type: 'SEARCH_FOR_MOVIES', movie});
+
 export const loadSuccess = (res, pageNo) => ({ type: 'FETCHING_DATA_SUCCESS', res, pageNo});
 
 export const loadError = res => ({ type: 'FETCHING_DATA_FAILURE', res});
