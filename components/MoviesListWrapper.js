@@ -10,8 +10,13 @@ const keyExtractor = (item, index) => index;
 
 class MoviesListWrapper extends PureComponent {
   componentWillMount() {
-    const { fetchingData } = this.props;
-    fetchingData(1);
+    const { fetchingData, navigation:{state:{params}} } = this.props;
+    if(params && params.type) { console.log(' i have the params', params)
+      fetchingData(1, params.type);
+    }
+    else {
+      fetchingData(1, 'defaultUrl');
+    }
   }
   fetchNextPage () {
     const {pageNo, fetchMoreData} = this.props;

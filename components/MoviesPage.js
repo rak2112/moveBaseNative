@@ -1,9 +1,9 @@
 import React, {Component, PureComponent} from 'react';
 import { FlatList } from 'react-native';
-import { Container } from 'native-base';
+import { Container, View } from 'native-base';
 const MoviesPage = ({items, renderListItems, keyExtractor, fetchNextPage, renderFooter}) => {
   return (
-    <Container style={{backgroundColor: '#E8E8E8', flex: 1}}>
+    <Container style={{backgroundColor: '#323232'}}>
       <FlatList
         numColumns={1}
         data={items}

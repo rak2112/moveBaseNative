@@ -16,14 +16,11 @@ const MoviesListLoader = LoadingCompWrapper(MoviesPage);
 const keyExtractor = (item, index) => index;
 
 export class SearchComp extends PureComponent {
-  componentWillMount () {
-    console.log('unmounting.... now...')
-  }
 
   componentWillReceiveProps(prevProp, nextProp) {
-    console.log('in hereee recive prop', this.props, 'prevProp', prevProp, 'nxtProp', nextProp);
-    const { items, defaultInputValue, resetQuickSearch } = this.props;
-    if(this.props.navigation.state.params && this.props.navigation.state.params.date !== prevProp.navigation.state.params.date) {
+    const { resetQuickSearch, navigation:{ state:{ params:params }} } = this.props;
+    const {navigation:{state:{params: prevParams}}} = prevProp;
+    if(params && params.date !== prevParams.date) {
       resetQuickSearch();
     }
   }
@@ -33,21 +30,21 @@ export class SearchComp extends PureComponent {
   );
 
   onChangeText = (text) => {
-    //console.log('texttt', text, 'this', this);
     const {searchForMovies} = this.props;
     searchForMovies(text)
   }
-  render() { //console.log('proppsssss', this.props);
+
+  render() {
     const { defaultInputValue } = this.props;
     return (
       <Container style={{backgroundColor: '#E8E8E8', flex: 1}}>
-      <SearchInput style={{height: 60}} defaultInputValue = {defaultInputValue} onChangeText={this.onChangeText}/>
-      <MoviesListLoader
-        renderListItems={this.renderListItems}
-        renderFooter={null}
-        fetchNextPage={null}
-        keyExtractor={keyExtractor}
-        {...this.props}/>
+        <SearchInput defaultInputValue = {defaultInputValue} onChangeText={this.onChangeText}/>
+        <MoviesListLoader
+          renderListItems={this.renderListItems}
+          renderFooter={null}
+          fetchNextPage={null}
+          keyExtractor={keyExtractor}
+          {...this.props}/>
       </Container>
     )
   }

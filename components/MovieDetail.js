@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Image, Dimensions, StyleSheet} from 'react-native';
-import { Container, Spinner, Header, Content, Card, CardItem, Text, Icon, Body, View } from 'native-base';
+import { StyleSheet} from 'react-native';
+import { Container, Content, Card, CardItem, Text, Icon, View } from 'native-base';
 import {paths} from './../constants/locationSvc';
 import globalStyles from './../styles/global';
-const win = Dimensions.get('window');
+import DetailAttrsLayout from './DetailAttrsLayout';
+import DetailGenresLayout from './DetailGenresLayout';
+import DetailTabsLayout from './DetailTabsLayout';
 
 const defaultProps = {
   isFetching: PropTypes.bool.isRequired,
@@ -20,42 +22,24 @@ const defaultProps = {
   })
 };
 const MovieDetail = (props) => {
+  const statusPremier = {propHeading:{attr1: 'STATUS', attr2: 'PREMIERE'}, propVal:{attr1: props.details.status, attr2: props.details.release_date} };
+  const ratingDuration = {propHeading:{attr1: 'DURATION', attr2: 'IMDB', rating: true}, propVal:{attr2: props.details.vote_average, attr1: `${props.details.runtime} Minutes`} };
   return (
-    <Container style={StyleSheet.flatten(globalStyles.backgroundGray)}>
+    <Container style={StyleSheet.flatten([globalStyles.backgroundGray])}>
       <Content>
         <Card style={{flex: 1}}>
-          <Image source={{uri: paths['imgPath500']+props.details.backdrop_path }} style={StyleSheet.flatten(styles.heroImage)}/>
-          <CardItem>
-            <Body>
-              <Text style={StyleSheet.flatten([styles.textBody, globalStyles.fontSize14])}>
-                {props.details.overview}
-              </Text>
-            </Body>
-          </CardItem>
+          <DetailGenresLayout {...props.details}/>
           <CardItem style={StyleSheet.flatten(styles.cardItemAttrs)}>
             <View style={{flex:1, flexDirection: 'column'}}>
+              <DetailAttrsLayout {...statusPremier}/>
               <View  style={StyleSheet.flatten(styles.flex1Row)}>
-                <Text style={StyleSheet.flatten([{flex:4}, globalStyles.darkGrayText, globalStyles.fontSize13])}>
-                  STATUS:
-                </Text>
-                <Text style={StyleSheet.flatten([styles.attrsText])}>
-                  {props.details.status}
-                </Text>
-                <Text style={StyleSheet.flatten([{flex:5}, globalStyles.darkGrayText, globalStyles.fontSize13])}>
-                  PREMIERE:
-                </Text>
-                <Text style={StyleSheet.flatten([styles.attrsText])}>
-                  {props.details.release_date}
-                </Text>
-              </View>
-              <View  style={StyleSheet.flatten(styles.flex1Row)}>
-                <Text style={StyleSheet.flatten([{flex:4}, globalStyles.darkGrayText, globalStyles.fontSize13])}>
+                <Text style={StyleSheet.flatten([{flex:4}, styles.headingText])}>
                   IMDB:
                 </Text>
-                <Text style={StyleSheet.flatten([{flex:7.5}, globalStyles.orangeText, globalStyles.fontSize13])}>
+                <Text style={StyleSheet.flatten([{flex:7.5}, styles.attrsText])}>
                   <Text style={StyleSheet.flatten([styles.rating, globalStyles.orangeText])}>{props.details.vote_average}<Icon style={StyleSheet.flatten([styles.rating, styles.iconStyle])} ios='ios-star' android="md-star" /></Text>
                 </Text>
-                <Text style={StyleSheet.flatten([{flex:5.5}, globalStyles.darkGrayText, globalStyles.fontSize13])}>
+                <Text style={StyleSheet.flatten([{flex:5.5}, styles.headingText])}>
                   DURATION:
                 </Text>
                 <Text style={StyleSheet.flatten([styles.attrsText])}>
@@ -65,21 +49,7 @@ const MovieDetail = (props) => {
             </View>
           </CardItem>
 
-          <CardItem style={StyleSheet.flatten([styles.cardItemAttrs, styles.cardItemGenres])}>
-            <View style={{flex:2, flexDirection: 'row'}}>
-              <Icon name="film" style={StyleSheet.flatten([styles.rating, styles.iconStyle])}/>
-              {
-                props.details.genres.map((item, index)=>{
-                  if(index !== props.details.genres.length-1) {
-                    return <Text key={index} style={StyleSheet.flatten(styles.genres)}>{item.name} | </Text>
-                  }
-                  else {
-                    return <Text key={index} style={StyleSheet.flatten(styles.genres)}>{item.name}</Text>
-                  }
-                })
-              }
-            </View>
-          </CardItem>
+          <DetailTabsLayout/>
         </Card>
       </Content>
     </Container>
@@ -87,11 +57,9 @@ const MovieDetail = (props) => {
 };
 
 const styles = StyleSheet.create({
-    heroImage: {
-      height: 250,
-      width: win.width-5,
-      flex: 1,
-      alignSelf: 'stretch'
+    tabBarUnderlineStyle: { backgroundColor: '#f65857' },
+    textStyle: {
+      color: '#ff5c00',
     },
     cardItemAttrs: {
       backgroundColor: '#292b2c',
@@ -100,7 +68,8 @@ const styles = StyleSheet.create({
     attrsText: {
       flex: 7,
       color: '#ff5c00',
-      fontSize: 13
+      fontSize: 15,
+      fontWeight: '600'
     },
     flex1Row: {
       flex:1,
@@ -110,13 +79,13 @@ const styles = StyleSheet.create({
     cardItemGenres: {
       backgroundColor: '#191919',
     },
-    genres: {
-      fontSize: 13,
-      color: '#ff5c00'
+    headingText: {
+      color: '#ccc',
+      fontSize: 14
     },
     rating: {
       marginRight: 3,
-      fontSize: 13,
+      fontSize: 15,
       color: '#ff5c00'
     },
     iconStyle: {
@@ -129,3 +98,6 @@ const styles = StyleSheet.create({
 
 MovieDetail.defaultProps = defaultProps;
 export default MovieDetail;
+
+//TODO: layout changess...
+// <DetailAttrsLayout {...ratingDuration}/>

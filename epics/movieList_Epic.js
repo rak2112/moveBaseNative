@@ -1,6 +1,6 @@
 import { paths } from './../constants/locationSvc';
 import { FETCHING_DATA } from './../constants/actionTypes';
-import { loadSuccess, loadError, loadSuccessDetails, movieSearched, resetQuickSearch } from './../actions/movieActions';
+import { loadSuccessInitial, loadSuccess, loadError, loadSuccessDetails, movieSearched, resetQuickSearch } from './../actions/movieActions';
 import 'rxjs/add/observable/dom/ajax';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/distinctUntilChanged';
@@ -9,15 +9,22 @@ import { ajax } from 'rxjs/observable/dom/ajax'
 import 'rxjs'
 import { Observable } from 'rxjs/Observable'
 
-export const fetchMoviesEpic = action$ =>
-  action$.ofType('FETCHING_DATA')
+export const fetchMoviesEpic = (action$, store) =>
+  action$.ofType('FETCHING_DATA_DEFAULT')
     .mergeMap(action =>
-      ajax.getJSON(`${paths.apiUrl}/discover/movie${paths.apiKey}&page=${action.pageNo}`)
-        .map(res => {
-          console.log('res in epicc', res);
-          return loadSuccess(res, action.pageNo)
+      ajax.getJSON(action.url)
+        .map(res => { console.log('actionnnnn', action, 'state', store.getState());
+          return loadSuccessInitial(res, action.movieType);
         })
     )
+export const fetchExploreEpic = (action$, store) =>
+action$.ofType('FETCHING_DATA_OTHER')
+  .mergeMap(action =>
+    ajax.getJSON(action.url)
+      .map(res => { console.log('actionnnnn', action, 'state', store.getState());
+        return loadSuccessInitial(res, action.movieType);
+      })
+  )
 //'FETCH_NEXT_PAGE'
 
 export const fetchNextPageEpic = action$ =>

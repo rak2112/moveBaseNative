@@ -1,9 +1,12 @@
 import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native';
-import { Spinner } from 'native-base';
-import { Container, Header, Title, Button, Content, Input, Item, Text, Icon, View } from 'native-base';
+import { Header, Title, Input, Item, View } from 'native-base';
 
+const defaultProps = {
+  defaultInputValue: PropTypes.string,
+  onChangeText: PropTypes.func.isRequired
+}
 const SearchInput = ({defaultInputValue, onChangeText}) => {
   return (
     <View>
@@ -20,17 +23,6 @@ const SearchInput = ({defaultInputValue, onChangeText}) => {
     </View>
   );
 }
-const styles = StyleSheet.create({
-    title: {
-      color: '#262626'
-    },
-    rating: {
-      fontSize: 16,
-      color: '#262626'
-    },
-    spinnerStyle:{
-      color: '#00d573'
-    }
-});
 
+SearchInput.defaultProps = defaultProps;
 export default SearchInput;

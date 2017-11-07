@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {Spinner} from 'native-base';
 
-export default LoadingCompWrapper = (WrappedComponent) => { console.log('wrapped comp')
+export default LoadingCompWrapper = (WrappedComponent) => {
   return class extends PureComponent {
     render() {
       const { isFetching } = this.props;

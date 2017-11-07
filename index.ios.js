@@ -11,7 +11,7 @@ import AppContainer from './containers/AppContainer';
 import configureStore from './store/configureStore';
 
 const store = configureStore();
-console.log('in app');
+
 const MovieBaseApp = () => (
   <Provider store={store}>
    <AppContainer/>

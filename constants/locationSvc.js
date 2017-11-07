@@ -17,3 +17,14 @@ export const menuData = [
   {id:3, routeName:'/popular', displayName:'Popular'},
   {id:4, routeName:'/upComing', displayName:'Up Coming'}
 ];
+
+// export const IMAGES = {
+//   action: require('./../images/blueAbsReady.jpg'),
+//   latest: require('./../images/holiReady.jpg'),
+//   upComing: require('./../images/greatFulColorReady.jpg'),
+//   popular: require('./../images/poplarReady.jpg'),
+//   comedy: require('./../images/waterColorReady.jpg'),
+//   adventure: require('./../images/pinkReady.jpg'),
+//   sciFi: require('./../images/purpleBubbleReady.jpg')
+//
+// };

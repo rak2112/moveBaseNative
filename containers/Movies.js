@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {paths} from './../constants/locationSvc';
 import { connect } from 'react-redux'

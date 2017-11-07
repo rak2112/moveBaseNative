@@ -25,8 +25,8 @@ const propTypes =  {
 const DetailsWithLoader = LoadingCompWrapper(MovieDetail);
 export class Details extends PureComponent {
   componentWillMount() {
-    const {id} = this.props.navigation.state.params;
-    const { fetchMovieDetails } = this.props;
+    //const {id} = this.props.navigation.state.params;
+    const { fetchMovieDetails, navigation:{state:{params:{id}}} } = this.props;
     fetchMovieDetails(id)
   }
   render() {
@@ -37,7 +37,7 @@ export class Details extends PureComponent {
   }
 }
 
-function mapStateToProps (state) { console.log('staateee', state);
+function mapStateToProps (state) {
   const {getDetails:movieDetails} = state;
   return {
     movieDetails
