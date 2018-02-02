@@ -1,6 +1,8 @@
 [ignore]
 ; We fork some components by platform
 .*/*[.]android.js
+.*/node_modules/react-native/Libraries/*
+.*/node_modules/react-navigation/*
 
 ; Ignore "BUCK" generated dirs
 <PROJECT_ROOT>/\.buckd/
@@ -14,12 +16,20 @@
 .*/Libraries/react-native/React.js
 .*/Libraries/react-native/ReactNative.js
 
+; Ignore polyfills
+.*/Libraries/polyfills/.*
+
+
 [include]
 
 [libs]
 node_modules/react-native/Libraries/react-native/react-native-interface.js
 node_modules/react-native/flow
 flow/
+/flow-typed/
+/flow-typed/npm
+/flow-typed/npm/
+libdefs.js
 
 [options]
 emoji=true
@@ -42,4 +52,4 @@ suppress_comment=\\(.\\|\n\\)*\\$FlowExpectedError
 unsafe.enable_getters_and_setters=true
 
 [version]
-^0.49.1
+^0.59.0

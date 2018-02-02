@@ -1,27 +1,30 @@
+//@flow
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import globalStyles from './../styles/global';
 import { View, Text, Icon} from 'native-base';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const defaultProps = {
-  propHeading: PropTypes.string.isRequired,
-  propVal: PropTypes.string.isRequired
-};
-const DetailAttrsLayout = ({propHeading, propVal}) => {
-  const ratedAttr = (propHeading.rating) ? <Text style={StyleSheet.flatten([styles.attrsText])}>{propVal.attr2}<Icon style={StyleSheet.flatten([styles.rating, styles.iconStyle])} ios='ios-star' android="md-star" /></Text> :
-  <Text style={StyleSheet.flatten([styles.attrsText])}>{propVal.attr2}</Text>;
+type Props = {
+  propHeading: {
+    icon1: string,
+    icon2: string
+  },
+  propVal: {
+    attr1: string | number,
+    attr2: string | number
+  }
+}
+const DetailAttrsLayout = ({propHeading, propVal}: Props) => {
   return (
     <View  style={StyleSheet.flatten(styles.flex1Row)}>
-      <Text style={StyleSheet.flatten([{flex:4}, styles.headingText])}>{propHeading.attr1}:</Text>
+      <Text style={StyleSheet.flatten([{flex:2}, styles.headingText])}><FontAwesome style={StyleSheet.flatten([styles.tabIcon])} name={propHeading.icon1}></FontAwesome></Text>
       <Text style={StyleSheet.flatten([styles.attrsText])}>{propVal.attr1}</Text>
-      <Text style={StyleSheet.flatten([{flex:5}, styles.headingText])}>{propHeading.attr2}:</Text>
+      <Text style={StyleSheet.flatten([{flex:2}, styles.headingText])}><FontAwesome style={StyleSheet.flatten([styles.tabIcon])} name={propHeading.icon2}></FontAwesome></Text>
       <Text style={StyleSheet.flatten([styles.attrsText])}>{propVal.attr2}</Text>
     </View>
   )
 };
-
-DetailAttrsLayout.defaultProps = defaultProps;
 
 export default DetailAttrsLayout;
 
@@ -36,17 +39,13 @@ const styles = StyleSheet.create({
     fontSize: 14
   },
   attrsText: {
-    flex: 7,
+    flex: 8,
     color: '#ff5c00',
     fontSize: 15,
     fontWeight: '600'
   },
-  rating: {
-    marginRight: 3,
-    fontSize: 16,
-    color: '#ff5c00'
-  },
-  iconStyle: {
-    fontSize: 15
+  tabIcon: {
+    color: '#ccc',
+    fontSize: 20
   },
 });

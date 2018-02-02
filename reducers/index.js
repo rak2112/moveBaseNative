@@ -4,7 +4,6 @@ import {getDetails, movies, getGenres, searchedMovies, discoverMovies, exploreMo
 const rootReducer = combineReducers({
   movies,
   searchedMovies,
-  getGenres,
   getDetails,
   discoverMovies,
   exploreMovies

@@ -1,23 +1,26 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+//@flow
+import * as React from 'react';
 import {paths} from './../constants/locationSvc';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import type { MapStateToProps } from 'react-redux';
 import { fetchingData, fetchMoreData } from './../actions/movieActions';
 import DiscoverMovies from './../components/DiscoverMovies';
 
-// const propTypes = {
-//   pageNo: PropTypes.number.isRequired,
-//   totalPages: PropTypes.number,
-//   items : PropTypes.arrayOf(PropTypes.object.isRequired),
-//   pageName: PropTypes.string,
-//   isFetching: PropTypes.bool.isRequired,
-//   hasError: PropTypes.bool.isRequired,
-//   errorStatus: PropTypes.string
-// };
 
-export const Discover = props => <DiscoverMovies {...props} />;
+type Props = {
+  +items: Array<{}>,
+  navigation:{navigate(string, {}):void}
+};
 
-function mapStateToProps (state) {
+type State = {
+  +discoverMovies: {
+    +movies: Array<{}>
+  }
+};
+
+export const Discover = (props: Props) => <DiscoverMovies {...props} />;
+
+const mapStateToProps : MapStateToProps<*,*,*> = (state: State): {} => {
   const { discoverMovies } = state;
   const { movies:items } = discoverMovies;
   return {
@@ -25,8 +28,4 @@ function mapStateToProps (state) {
   };
 }
 
-//Discover.propTypes = propTypes;
-
-export default connect(
-  mapStateToProps
-)(DiscoverMovies);
+export default connect(mapStateToProps)(Discover);

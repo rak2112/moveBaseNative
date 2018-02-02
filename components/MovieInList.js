@@ -1,3 +1,4 @@
+//@flow
 import React, {Component, PureComponent} from 'react';
 import { StyleSheet, TouchableOpacity, Image } from 'react-native';
 import PropTypes from 'prop-types';
@@ -7,17 +8,28 @@ import {paths} from './../constants/locationSvc';
 import globalStyles from './../styles/global';
 import ListMovieLayout from './ListMovieLayout';
 
-const defaultProps = {
-  item: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    backdrop_path: PropTypes.string.isRequired,
-    release_date: PropTypes.string.isRequired,
-
-  })
+type Props = {
+  navigation:{
+    state:{
+      params:{
+        id?: string,
+        bColor?: string,
+        type?: string,
+        date?: Date
+      }
+    },
+    navigate(string, {}): void
+  },
+  item: {
+    title: string,
+    backdrop_path: string,
+    release_date: string,
+    vote_average: number
+  }
 };
 
-export default class MovieInList extends PureComponent {
-  getDetails(data) {
+export default class MovieInList extends PureComponent <Props>{
+  getDetails(data: Object) {
     this.props.navigation.navigate('Details', data);
   }
   render() {
@@ -29,8 +41,8 @@ export default class MovieInList extends PureComponent {
         onPress={()=>this.getDetails(item)}>
           <View style={{flex:1, flexDirection: 'column'}}>
             <View  style={StyleSheet.flatten(styles.flex1Row)}>
-              <Image style={StyleSheet.flatten([{flex:4}, styles.gridItemImage])} source={{ uri: paths['imgPath185']+item.backdrop_path }} />
-              <View style={{flex:8, paddingLeft: 8, flexDirection: 'column'}}>
+              <Image style={StyleSheet.flatten([{flex:4}, styles.gridItemImage])} source={{ uri: `${paths['imgPath300']}${item.backdrop_path}` }} />
+              <View style={StyleSheet.flatten(styles.flex8Col)}>
                 <H3 numberOfLines={1} ellipsizeMode={'tail'} style={StyleSheet.flatten(styles.title)}>{item.title}</H3>
                 <ListMovieLayout propHeading= {'Status'} propVal={'Released'} />
                 <ListMovieLayout propHeading= {'Premiere'} propVal={item.release_date} />
@@ -45,7 +57,6 @@ export default class MovieInList extends PureComponent {
   }
 };
 
-MovieInList.defaultProps = defaultProps;
 const styles = StyleSheet.create({
     title: {
       flex:1,
@@ -85,4 +96,9 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       paddingBottom: 5
     },
+    flex8Col: {
+      flex:8,
+      paddingLeft: 8,
+      flexDirection: 'column'
+    }
 });

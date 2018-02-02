@@ -1,23 +1,50 @@
+//@flow
 import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 import { StyleSheet } from 'react-native';
-
+// import type { ReactClass } from 'react';
+import LoadingCompWrapper from './LoaderWrapper';
 import MoviesPage from './../components/MoviesPage';
 import MovieInList from './../components/MovieInList';
 
 import SearchInput from './../components/SearchInput';
 import { searchForMovies, resetQuickSearch } from './../actions/movieActions';
-import { Spinner } from 'native-base';
-import { Container, Header, Title, Button, Content, Input, Item, Text, Icon, View } from 'native-base';
+import { Container } from 'native-base';
 
 
 const MoviesListLoader = LoadingCompWrapper(MoviesPage);
 const keyExtractor = (item, index) => index;
 
-export class SearchComp extends PureComponent {
+type Props = {
+  isFetching: boolean,
+  items: Array<{
+    title: string,
+    backdrop_path: string,
+    release_date: string,
+    vote_average: number
+  }>,
+  defaultInputValue: string,
+  resetQuickSearch(): void,
+  searchForMovies(text: string): void,
+  navigation: {
+    state: {
+      params: {
+        id?: string,
+        bColor?: string,
+        type?: string,
+        date?: Date
+      }
+    },
+    navigate(): void
+  }
+};
+type State = {
+  +searchedMovies: Props;
+};
 
-  componentWillReceiveProps(prevProp, nextProp) {
+export class SearchComp extends PureComponent <Props>{
+  componentWillReceiveProps(prevProp: any): mixed {
     const { resetQuickSearch, navigation:{ state:{ params:params }} } = this.props;
     const {navigation:{state:{params: prevParams}}} = prevProp;
     if(params && params.date !== prevParams.date) {
@@ -25,11 +52,11 @@ export class SearchComp extends PureComponent {
     }
   }
 
-  renderListItems = ({item}) => (
+  renderListItems = ({item}: Object): React$Node => (
     <MovieInList item={item} navigation={this.props.navigation}/>
   );
 
-  onChangeText = (text) => {
+  onChangeText = (text: string) : void => {
     const {searchForMovies} = this.props;
     searchForMovies(text)
   }
@@ -41,21 +68,18 @@ export class SearchComp extends PureComponent {
         <SearchInput defaultInputValue = {defaultInputValue} onChangeText={this.onChangeText}/>
         <MoviesListLoader
           renderListItems={this.renderListItems}
-          renderFooter={null}
-          fetchNextPage={null}
           keyExtractor={keyExtractor}
           {...this.props}/>
       </Container>
     )
   }
 }
-
-function mapStateToProps (state) {
+const mapStateToProps = (state: State): {} => {
   const { defaultInputValue, isFetching, items } = state.searchedMovies;
   return {
     defaultInputValue, isFetching, items
-  }
-}
+  };
+};
 export default connect(
   mapStateToProps,
   {

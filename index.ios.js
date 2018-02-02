@@ -17,4 +17,5 @@ const MovieBaseApp = () => (
    <AppContainer/>
   </Provider>
 );
+export default MovieBaseApp;
 AppRegistry.registerComponent('movieBaseNative', () => MovieBaseApp);

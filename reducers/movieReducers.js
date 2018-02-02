@@ -1,23 +1,25 @@
-export const getGenres = (state = {genres:[]}, action) => {
-  switch (action.type) {
-    case 'LOADING_GENRE':
-    return {
-      ...state,
-      genres: action.res.genres
-    }
-    default: return state;
-  }
-}
+//@flow
+type detailState = {
+  +errorDetails: boolean,
+  +isFetching:boolean,
+  +utubeKey:null,
+  +details:{},
+  +videos:{},
+  +cast:Array<{}>,
+  +crew:Array<{}>
 
+};
+type Action = any; //:TODO abstract the actions from movieActions and import here
 const initialStateDetails = {
   errorDetails: false,
   isFetching:true,
   utubeKey:null,
   details:{},
   videos:{},
-  castCrew:{}
+  cast:[],
+  crew:[]
 };
-export const getDetails = (state = initialStateDetails , action) => {
+export const getDetails = (state: detailState = initialStateDetails , action: Action) => {
   switch (action.type) {
     case 'FETCHING_DETAILS':
       return {...state, isFetching: true}
@@ -26,15 +28,25 @@ export const getDetails = (state = initialStateDetails , action) => {
     case 'DETAILS_LOADED':
       return {
         ...state,
-        isFetching: false,  details: action.res.details, videos: action.res.videos, castCrew:action.res.casts
+        isFetching: false,
+        details: action.res.details,
+        videos: action.res.videos,
+        cast: action.res.casts.cast.filter(person => person.order < 7),
+        crew: action.res.casts.crew.filter((person, index) => index < 7)
       }
     default :
       return state;
   }
 }
 
-const initialStateMovies = {isFetching:true, hasError: false, pageNo:1, totalPages: 1, items: [], totalItems:[]};
-export const movies = ( state = initialStateMovies, action) => { console.log('action in movies', action);
+type movieState = {
+  +isFetching: boolean,
+  +hasError: boolean,
+  +pageNo: number,
+  +items: Array<{}>
+};
+const initialStateMovies = {isFetching:true, hasError: false, pageNo:1, totalPages: 1, items: []};
+export const movies = ( state: movieState = initialStateMovies, action: Action) => { console.log('action in movies', action);
   switch (action.type) {
     case 'FETCHING_DATA_DEFAULT':
       return {
@@ -53,18 +65,14 @@ export const movies = ( state = initialStateMovies, action) => { console.log('ac
         isFetching: false,
         hasError: false,
         pageNo: action.res['page'],
-        totalItems: action.res['total_results'],
-        totalPages:action.res['total_pages'],
         items: action.res['results']
       }
-    case 'FETCHING_DATA_SUCCESS':
+    case 'NEXT_PAGE_DATA_SUCCESS':
       return {
         ...state,
         isFetching: false,
         hasError: false,
         pageNo: action.res['page'],
-        totalItems: action.res['total_results'],
-        totalPages:action.res['total_pages'],
         items: [...state.items, ...action.res['results']]
       }
     default :
@@ -72,8 +80,8 @@ export const movies = ( state = initialStateMovies, action) => { console.log('ac
   }
 }
 
-const initialStateExplore = {isFetching:true, hasError: false, pageNo:1, totalPages: 1, items: [], totalItems:[]};
-export const exploreMovies = ( state = initialStateExplore, action) => { console.log('action in explore', action);
+const initialStateExplore = {isFetching:true, hasError: false, pageNo:1, items: []};
+export const exploreMovies = ( state: movieState = initialStateExplore, action: Action) => { console.log('action in explore', action);
   switch (action.type) {
     case 'FETCHING_DATA_OTHER':
       return {
@@ -96,13 +104,12 @@ export const exploreMovies = ( state = initialStateExplore, action) => { console
         totalPages:action.res['total_pages'],
         items: action.res['results']
       }
-    case 'NEXT_PAGE_DATA_OTHER':
+    case 'NEXT_PAGE_DATA_SUCESS_OTHER':
       return {
         ...state,
         isFetching: false,
         hasError: false,
         pageNo: action.res['page'],
-        totalItems: action.res['total_results'],
         totalPages:action.res['total_pages'],
         items: [...state.items, ...action.res['results']]
       }
@@ -111,8 +118,11 @@ export const exploreMovies = ( state = initialStateExplore, action) => { console
   }
 }
 
+type foundMoviesState = {
+  +isFetching: boolean, +items:Array<{}>, +defaultInputValue: null
+};
 const moviesFound = {isFetching: false, items:[], defaultInputValue: null};
-export const searchedMovies = (state = moviesFound, action) => {
+export const searchedMovies = (state: foundMoviesState = moviesFound, action: Action) => {
   switch(action.type) {
     case 'SEARCH_FOR_MOVIES':
       return {
@@ -127,7 +137,6 @@ export const searchedMovies = (state = moviesFound, action) => {
         items: action.res['results'].filter(item=> item.media_type === 'movie')
       }
     case 'RESET_QUICK_SEARCH':
-      console.log('resettting.....')
       return {
         ...state,
         defaultInputValue: null,
@@ -141,16 +150,15 @@ export const searchedMovies = (state = moviesFound, action) => {
 
 const moviesTypes = {
   movies:[
-    {id: 6, name: 'In Cinemas', bColor: '#8ac52b', sColor: '#00d573', image: '', type: 'inCinemas'},
-    {id: 2, name: 'Up Coming', bColor: '#fefe2a', sColor: '#fefe2a', image: 'greatFulColorReady.jpg', type: 'upComing'},
     {id: 3, name: 'Popular Choice', bColor: '#fff', sColor: '#4c4c4c', image: '', type: 'popular' },
+    {id: 6, name: 'In Cinemas', bColor: '#8ac52b', sColor: '#00d573', image: '', type: 'inCinemas'},
     {id: 7, name: 'Top Rated', bColor: '#863a9e', sColor: '#00d573', image: '', type: 'topRated'},
-    {id: 4, name: 'Action', bColor: '#1f4785', sColor: '#F17F42', image: '', type: 'action'},
-    {id: 5, name: 'Comedy', bColor: '#ffdd53', sColor: '#00d573', image: '', type: 'comedy'},
+    {id: 2, name: 'Up Coming', bColor: '#fefe2a', sColor: '#fefe2a', image: 'greatFulColorReady.jpg', type: 'upComing'},
     {id: 1, name: 'Latest', bColor: '#f96d00', sColor: '#F17F42', image: '', type: 'latest'},
+    // {id: 4, name: 'Action', bColor: '#1f4785', sColor: '#F17F42', image: '', type: 'action'},
+    // {id: 5, name: 'Comedy', bColor: '#ffdd53', sColor: '#00d573', image: '', type: 'comedy'},
   ]
 };
-
-export const discoverMovies = (state= moviesTypes) =>{
-  return state;
+export const discoverMovies = () =>{
+  return moviesTypes;
 }

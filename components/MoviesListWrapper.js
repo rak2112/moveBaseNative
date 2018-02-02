@@ -1,31 +1,53 @@
+//@flow
 import React, {Component, PureComponent} from 'react';
 import MoviesPage from './MoviesPage';
 import MovieInList from './MovieInList';
 import LoadingCompWrapper from './../containers/LoaderWrapper';
 import { Spinner } from 'native-base';
 
+type Props = {
+  isFetching: boolean,
+  pageNo: number,
+  fetchingData(number, string | typeof undefined): void,
+  fetchMoreData(number, string | typeof undefined): void,
+  item: {
+    title: string,
+    backdrop_path: string,
+    release_date: string,
+    vote_average: number
+  },
+  navigation: {
+    state: {
+      params: {
+        id?: string,
+        bColor?: string,
+        date?: Date,
+        type?: string
+      }
+    },
+    navigate(): void
+  }
+};
+
 const MoviesListLoader = LoadingCompWrapper(MoviesPage);
 
 const keyExtractor = (item, index) => index;
 
-class MoviesListWrapper extends PureComponent {
+class MoviesListWrapper extends PureComponent <Props>{
   componentWillMount() {
     const { fetchingData, navigation:{state:{params}} } = this.props;
-    if(params && params.type) { console.log(' i have the params', params)
-      fetchingData(1, params.type);
-    }
-    else {
-      fetchingData(1, 'defaultUrl');
-    }
+    const movieType: string = (params && params.type) ? params.type : 'defaultUrl';
+    fetchingData(1, movieType);
   }
   fetchNextPage () {
-    const {pageNo, fetchMoreData} = this.props;
-    fetchMoreData((pageNo+1));
+    const { pageNo, fetchMoreData, navigation:{state:{params}} } = this.props;
+    const movieType: string = (params && params.type) ? params.type : 'defaultUrl';
+    fetchMoreData((pageNo+1), movieType);
   }
   renderFooter() {
     return <Spinner color='green'/>
   }
-  renderListItems = ({item}) => (
+  renderListItems = ({item}: Object): React$Node => (
     <MovieInList item={item} navigation={this.props.navigation}/>
   );
   render () {

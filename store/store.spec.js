@@ -1,3 +1,6 @@
+it('renders correctly', () => {
+  expect(1+1).toBe(2);
+});
 // import * as ActionTypes from '../constants/actionTypes';
 //
 // import MockDate from 'mockdate';

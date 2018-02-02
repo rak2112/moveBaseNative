@@ -1,65 +1,51 @@
+//@flow
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import globalStyles from './../styles/global';
-import { Text, Icon, Tabs, Tab, TabHeading, } from 'native-base';
-
+import { Text, Tabs, Tab, TabHeading, } from 'native-base';
+import CastListTab from './CastListTab'
+import CrewListTab from './CrewListTab';
+import TrailerTab from './TrailerTab';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-const defaultProps = {
-  propHeading: PropTypes.string.isRequired,
-  propVal: PropTypes.string.isRequired
+type Props = {
+  cast: Array<{id: number, name: string}>,
+  crew: Array<{id: number, name: string}>,
+  videos: Array<{id: number, key: string}>
 };
-const DetailTabsLayout = ({propHeading, propVal}) => {
+
+const DetailTabsLayout = ({cast, crew, videos}: Props) => {
   return (
-    <Tabs tabBarUnderlineStyle={{ backgroundColor: '#292b2c' }}>
+    <Tabs tabBarUnderlineStyle={{ backgroundColor: '#ff5c00' }}>
       <Tab
-        heading={ <TabHeading><MaterialIcons style={{fontSize: 25, color: '#ff5c00'}} name="face"></MaterialIcons><Text style={StyleSheet.flatten([globalStyles.detailHeader])}>Cast</Text></TabHeading>}>
-        <Text> i am tab 1</Text>
+        heading={ <TabHeading style={StyleSheet.flatten([styles.tabBackground])}><MaterialIcons style={StyleSheet.flatten([styles.tabIcon])} name="face"></MaterialIcons><Text style={StyleSheet.flatten([globalStyles.orangeText])}>Cast</Text></TabHeading>}>
+        <CastListTab cast={cast}/>
       </Tab>
       <Tab
         activeTextStyle={{color: '#ff5c00'}}
         textStyle={{color: '#fff'}}
-        heading={ <TabHeading><FontAwesome style={{fontSize: 25, color: '#ff5c00'}} name="video-camera"></FontAwesome><Text style={StyleSheet.flatten([globalStyles.orangeText])}>Crew</Text></TabHeading>}>
-        <Text> i am tab 2</Text>
+        heading={ <TabHeading style={StyleSheet.flatten([styles.tabBackground])}><FontAwesome style={StyleSheet.flatten([styles.tabIcon])} name="video-camera"></FontAwesome><Text style={StyleSheet.flatten([globalStyles.orangeText])}>Crew</Text></TabHeading>}>
+        <CrewListTab crew={crew}/>
       </Tab>
       <Tab
         activeTextStyle={{color: '#ff5c00'}}
         textStyle={{color: '#fff'}}
-        heading={ <TabHeading><FontAwesome style={{fontSize: 25, color: '#ff5c00'}} name="youtube-play"></FontAwesome><Text style={StyleSheet.flatten([globalStyles.orangeText])}>Trailers</Text></TabHeading>}>
-        <Text> i am tab 3</Text>
+        heading={ <TabHeading style={StyleSheet.flatten([styles.tabBackground])}><FontAwesome style={StyleSheet.flatten([styles.tabIcon])} name="youtube-play"></FontAwesome><Text style={StyleSheet.flatten([globalStyles.orangeText])}>Trailers</Text></TabHeading>}>
+        <TrailerTab videos={videos}/>
       </Tab>
     </Tabs>
   )
 };
 
-DetailTabsLayout.defaultProps = defaultProps;
-
 export default DetailTabsLayout;
 
 const styles = StyleSheet.create({
-  flex1Row: {
-    flex:1,
-    flexDirection: 'row',
-    paddingBottom: 5
+  tabBackground: {
+    backgroundColor: '#000'
   },
-  headingText: {
+  tabIcon: {
     color: '#ccc',
-    fontSize: 14
-  },
-  attrsText: {
-    flex: 7,
-    color: '#ff5c00',
-    fontSize: 15,
-    fontWeight: '600'
-  },
-  rating: {
-    marginRight: 3,
-    fontSize: 16,
-    color: '#ff5c00'
-  },
-  iconStyle: {
-    fontSize: 15
-  },
+    fontSize: 25
+  }
 });

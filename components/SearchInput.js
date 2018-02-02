@@ -1,13 +1,14 @@
+//@flow
 import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet } from 'react-native';
 import { Header, Title, Input, Item, View } from 'native-base';
 
-const defaultProps = {
-  defaultInputValue: PropTypes.string,
-  onChangeText: PropTypes.func.isRequired
-}
-const SearchInput = ({defaultInputValue, onChangeText}) => {
+type Props = {
+  defaultInputValue: string,
+  onChangeText: (string)=>void
+};
+const SearchInput = ({defaultInputValue, onChangeText}: Props) => {
   return (
     <View>
       <Header>
@@ -24,5 +25,4 @@ const SearchInput = ({defaultInputValue, onChangeText}) => {
   );
 }
 
-SearchInput.defaultProps = defaultProps;
 export default SearchInput;

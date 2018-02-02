@@ -1,7 +1,7 @@
+//@flow
 import React, { Component, PureComponent } from 'react';
-import { Container, Header, Footer, FooterTab, Content, Tab, Button, Tabs, Text, Icon } from 'native-base';
+import { Footer, FooterTab, Button, Icon } from 'native-base';
 import { TabNavigator, StackNavigator } from "react-navigation";
-import { NavigationActions } from 'react-navigation'
 import Movies from './Movies';
 import ExploreMovies from './ExploreMovies';
 import Discover from './Discover';
@@ -65,25 +65,16 @@ export const DiscoverStack = StackNavigator({
   }
 });
 
-class TabComp extends PureComponent {
-  componentWillReceiveProps(prevProps) {
-    console.log('props changesssddddd.....', this.props, 'prevProps', prevProps);
-
+type Props = {
+  navigation: {
+    navigate(string, ?Object): void
+  },
+  navigationState: {
+    index: number
   }
-  jumpToIndex(index) {
-    const lastPosition = this.props.navigationState.index
-    const tab = this.props.navigationState.routes[index]
-    const tabRoute = tab.routeName
-    const firstTab = tab.routes[0].routeName
+};
 
-    const tabAction = NavigationActions.navigate({ routeName: tabRoute });
-			const firstScreenAction = NavigationActions.reset({ index: this.props.navigationState.index,
-				actions: [ NavigationActions.navigate({ routeName: firstTab }) ]
-			});
-
-    lastPosition !== index && this.props.navigation.dispatch(tabAction)
-    lastPosition === index && this.props.navigation.dispatch(firstScreenAction)
-  }
+class TabComp extends PureComponent <Props> {
   render () {
     const { navigation, navigationState:{index} } = this.props;
       return (
@@ -111,6 +102,8 @@ class TabComp extends PureComponent {
     );
   }
 };
+
+// $FlowFixMe
 export default (MainScreenNavigator = TabNavigator(
   {
     Movies: {

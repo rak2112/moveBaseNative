@@ -1,3 +1,4 @@
+//@flow
 import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import {paths} from './../constants/locationSvc';
@@ -5,27 +6,46 @@ import { connect } from 'react-redux'
 import { fetchingData, fetchMoreData } from './../actions/movieActions';
 import MoviesListWrapper from './../components/MoviesListWrapper';
 
-const propTypes = {
-  pageNo: PropTypes.number.isRequired,
-  totalPages: PropTypes.number,
-  items : PropTypes.arrayOf(PropTypes.object.isRequired),
-  pageName: PropTypes.string,
-  isFetching: PropTypes.bool.isRequired,
-  hasError: PropTypes.bool.isRequired,
-  errorStatus: PropTypes.string
+type Props = {
+  isFetching: boolean,
+  hasError?: boolean,
+  pageNo: number,
+  items? : Array<{}>,
+  errorStatus?: string,
+  fetchingData(number, string | typeof undefined): void,
+  fetchMoreData(number): void,
+  item: {
+    title: string,
+    backdrop_path: string,
+    release_date: string,
+    vote_average: number
+  },
+  navigation: {
+    state: {
+      params: {
+        id?: string,
+        bColor?: string,
+        date?: Date,
+        type?: string
+      }
+    },
+    navigate(): void
+  }
 };
 
-export const Movies = props => <MoviesListWrapper {...props} />;
+type State = {
+  +movies: Props
+};
 
-function mapStateToProps (state) {
+export const Movies = (props: Props) => <MoviesListWrapper {...props} />;
+
+const mapStateToProps = (state: State): {} => { console.log('state', state);
   const { movies } = state;
-  const { isFetching, hasError, errorStatus, items, pageNo, totalPages } = movies;
+  const { isFetching, hasError, errorStatus, items, pageNo } = movies;
   return {
-    items, isFetching, hasError, errorStatus, pageNo, totalPages
+    items, isFetching, hasError, errorStatus, pageNo
   };
-}
-
-Movies.propTypes = propTypes;
+};
 
 export default connect(
   mapStateToProps,

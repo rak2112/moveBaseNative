@@ -13,28 +13,21 @@ export const fetchMoviesEpic = (action$, store) =>
   action$.ofType('FETCHING_DATA_DEFAULT')
     .mergeMap(action =>
       ajax.getJSON(action.url)
-        .map(res => { console.log('actionnnnn', action, 'state', store.getState());
-          return loadSuccessInitial(res, action.movieType);
-        })
+        .map(res => loadSuccessInitial(res, action.movieType))
     )
 export const fetchExploreEpic = (action$, store) =>
 action$.ofType('FETCHING_DATA_OTHER')
   .mergeMap(action =>
     ajax.getJSON(action.url)
-      .map(res => { console.log('actionnnnn', action, 'state', store.getState());
-        return loadSuccessInitial(res, action.movieType);
-      })
+      .map(res => loadSuccessInitial(res, action.movieType))
   )
 //'FETCH_NEXT_PAGE'
 
 export const fetchNextPageEpic = action$ =>
   action$.ofType('FETCH_NEXT_PAGE')
     .mergeMap(action =>
-      ajax.getJSON(`${paths.apiUrl}/discover/movie${paths.apiKey}&page=${action.pageNo}`)
-        .map(res => {
-          console.log('res in nxt page epicc', res);
-          return loadSuccess(res, action.pageNo)
-        })
+      ajax.getJSON(action.url)
+        .map(res => loadSuccess(res, action.movieType))
     )
 
 //Epic MovieDetails...
@@ -56,9 +49,6 @@ export const searchForMoviesEpic = action$ =>
     .distinctUntilChanged()
     .switchMap(action => console.log('movies', action) ||
       ajax.getJSON(`${paths.apiUrl}/search/multi${paths.apiKey}&language=en-US&query=${action.movie}`)
-        .map(res => {
-          console.log('res in search for movies..', res);
-          return movieSearched(res)
-        })
+        .map(res => movieSearched(res))
         .catch(err => Observable.of(resetQuickSearch()) )
     )
